@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:road_sentinel/backends/auth.dart';
 import 'package:road_sentinel/views/w_get_started.dart';
+import 'package:road_sentinel/views/w_permission_access.dart';
 import 'package:road_sentinel/views/w_user_home.dart';
 import './w_animated_hero.dart';
 import '../utils/script.dart';
@@ -34,14 +35,10 @@ class _LoginWidget extends State<LoginWidget> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void togglePasswordVisibility() {
-    setState(() {
-      passwordIsVisible = !passwordIsVisible;
-    });
-  }
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    checkSession();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       if (widget.isInvalidConnection) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -63,6 +60,24 @@ class _LoginWidget extends State<LoginWidget> {
         }
       }
     });
+  }
+
+  checkSession() async {
+    bool isValid = await checkSessionToken();
+    if (isValid) {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => PermissionAccessWidget()));
+    }
+  }
+
+  void togglePasswordVisibility() {
+    setState(() {
+      passwordIsVisible = !passwordIsVisible;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: hexToColor('#17192D'),
         extendBodyBehindAppBar: true,
@@ -240,8 +255,6 @@ class _LoginWidget extends State<LoginWidget> {
                                 0, 30, 0, 0),
                             child: ElevatedButton(
                               onPressed: () {
-                                authUser(emailController.text,
-                                    passwordController.text);
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -254,15 +267,10 @@ class _LoginWidget extends State<LoginWidget> {
                                               if (snapshot.connectionState ==
                                                   ConnectionState.waiting) {
                                                 return ScreenLoaderWidget();
-                                              } else if (snapshot.hasError) {
-                                                return LoginWidget(
-                                                  isFirstLaunch: false,
-                                                  isInvalidConnection: true,
-                                                );
                                               } else {
                                                 if (snapshot.data?["status"] ==
                                                     true) {
-                                                  return UserHomeWidget();
+                                                  return PermissionAccessWidget();
                                                 } else {
                                                   return LoginWidget(
                                                       isFirstLaunch: false,

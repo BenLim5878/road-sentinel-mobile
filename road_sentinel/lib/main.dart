@@ -1,3 +1,5 @@
+import 'package:road_sentinel/views/w_user_home.dart';
+
 import 'views/w_login.dart';
 import 'views/w_get_started.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +21,13 @@ class PreLoginPage extends StatelessWidget {
   PreLoginPage(this.isFirstLaunch);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: PermissionAccessWidget());
-    // home: isFirstLaunch
-    //     ? SwipeScreen(isFirstLaunch: isFirstLaunch)
-    //     : LoginWidget(
-    //         isFirstLaunch: isFirstLaunch,
-    //       ));
+    // return MaterialApp(home: PermissionAccessWidget());
+    return MaterialApp(
+        home: isFirstLaunch
+            ? SwipeScreen(isFirstLaunch: isFirstLaunch)
+            : LoginWidget(
+                isFirstLaunch: isFirstLaunch,
+              ));
   }
 }
 

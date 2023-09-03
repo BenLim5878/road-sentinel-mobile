@@ -46,7 +46,15 @@ dependencies:
   camera: ^0.10.5+3
   permission_handler: ^10.4.3
   location: ^5.0.3
+  http_parser: ^4.0.2
+  image: ^4.0.17
+  wakelock: ^0.6.2
+  flutter_launcher_icons: ^0.13.1
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/app-icon.png"
 
 dev_dependencies:
   flutter_test:
